@@ -1,0 +1,33 @@
+name: Test Playbook
+'on':
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  integration:
+    name: Integration
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install test dependencies.
+        run: |
+          sudo pip3 install ansible
+          ansible-galaxy install -r ./playbook/requirements.yml
+
+      - name: Test the playbook's syntax.
+        working-directory: ./playbook
+        run: ansible-playbook main.yml -i tests/inventory --syntax-check
+
+      - name: Test the playbook.
+        working-directory: ./playbook
+        run: ansible-playbook main.yml -i tests/inventory
+        env:
+          ANSIBLE_FORCE_COLOR: '1'
+
