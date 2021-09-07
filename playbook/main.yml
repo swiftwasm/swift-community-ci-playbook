@@ -1,12 +1,29 @@
 ---
 - hosts: all
   tasks:
+    - name: Create a buildbot user
+      ansible.builtin.user:
+        name: buildbot
+        shell: /bin/bash
+      become: true
+
+    - name: Set authorized keys for buildbot
+      ansible.posix.authorized_key:
+        user: buildbot
+        state: present
+        key: '{{ item }}'
+      become: true
+      with_file:
+        - public-keys/apple-jenkins.pub
+        - public-keys/katei.pub
+
     - name: Install dependencies from snap
       community.general.snap:
         name:
           - sccache
         channel: candidate
         classic: true
+      become: true
     - name: Install dependencies from apt
       ansible.builtin.apt:
         package:
@@ -36,4 +53,5 @@
           - unzip
           - uuid-dev
         state: present
+      become: true
 
