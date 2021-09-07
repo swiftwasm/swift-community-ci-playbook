@@ -52,6 +52,7 @@
           - tzdata
           - unzip
           - uuid-dev
+          - default-jre # so the Jenkins master can access the server
         state: present
       become: true
 
