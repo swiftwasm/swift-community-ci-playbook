@@ -26,6 +26,7 @@
       become: true
     - name: Install dependencies from apt
       ansible.builtin.apt:
+        update_cache: true
         package:
           - build-essential
           - clang
