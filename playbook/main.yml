@@ -15,7 +15,6 @@
       become: true
       with_file:
         - public-keys/apple-jenkins.pub
-        - public-keys/katei.pub
 
     - name: Install dependencies from snap
       community.general.snap:
