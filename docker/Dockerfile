@@ -10,9 +10,16 @@ RUN groupmod -n buildbot build-user
 RUN usermod -d /home/buildbot -m buildbot
 WORKDIR /home/buildbot
 
-# Add PATH environment variable in profile
-# to be used in ssh session
-RUN echo "PATH=$PATH" >> /home/buildbot/.profile
+# Set PermitUserEnvironment to yes in /etc/ssh/sshd_config
+# Set $PATH in /home/buildbot/.ssh/environment
+RUN mkdir -p /home/buildbot/.ssh && \
+    chmod 700 /home/buildbot/.ssh && \
+    chown buildbot:buildbot /home/buildbot/.ssh && \
+    touch /home/buildbot/.ssh/authorized_keys && \
+    chmod 600 /home/buildbot/.ssh/authorized_keys && \
+    chown buildbot:buildbot /home/buildbot/.ssh/authorized_keys && \
+    echo "PATH=$PATH" > /etc/environment && \
+    chown buildbot:buildbot /etc/environment
 
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D", "-e"]
