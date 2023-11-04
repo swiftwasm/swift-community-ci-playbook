@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker build -t ghcr.io/swiftwasm/swift-community-ci-playbook/swift-ci:main-ubuntu-20.04 https://raw.githubusercontent.com/apple/swift-docker/main/swift-ci/master/ubuntu/20.04/Dockerfile
+docker build -t ghcr.io/swiftwasm/swift-community-ci-playbook/swift-ci-node:main-ubuntu-20.04 .
